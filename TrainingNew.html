@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lobito Fitness Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f0f4f8;
+      color: #333;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .day-selector {
+      margin-bottom: 20px;
+      display: flex;
+        justify-content: center;
+        gap: 10px; /* space between buttons */
+        margin-bottom: 20px;
+    }
+
+    .day-selector button {
+      margin-right: 10px;
+      padding: 10px 15px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #006d77;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .day-selector button:hover {
+      background-color: #00535b;
+    }
+
+    .section {
+      margin-top: 30px;
+    }
+
+    .section h2 {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .exercise {
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .exercise .name {
+      font-weight: bold;
+    }
+
+    .exercise .details {
+      font-size: 14px;
+      color: #666;
+      text-align: right;
+    }
+
+    .exercise .details a {
+      color: #0077cc;
+      text-decoration: none;
+      margin-left: 10px;
+    }
+
+    .placeholder {
+      margin-top: 40px;
+      font-size: 18px;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Lobito Fitness Tracker</h1>
+
+  <div class="day-selector">
+    <button onclick="loadDay('Day1')">Day 1</button>
+    <button onclick="loadDay('Day2')">Day 2</button>
+    <button onclick="loadDay('Day3')">Day 3</button>
+  </div>
+
+  <div id="workout-container" class="placeholder">Please select a day to begin.</div>
+
+  <script>
+    const exercises = {
+      Day1: {
+        WarmUp: [
+          { name: "Jumping Jacks (1 min)", duration: 1 },
+          { name: "Arm Circles (1 min)", duration: 1 },
+          { name: "Leg Swings (1 min per leg)", duration: 2 },
+        ],
+        Exercise: [
+          { name: "Bodyweight Squats (3x10)", duration: 3},
+          { name: "Push-ups (3x10)", duration: 3},
+          { name: "Glute Bridges (2x1 min)", duration: 2 },
+          { name: "Plank (45 sec)", duration: 0.75 },
+          { name: "Side Plank (30 sec/side)", duration: 1 },
+          { name: "Superman Hold (3x30 sec)", duration: 2, ref: "https://images.ctfassets.net/hjcv6wdwxsdz/79sS2tpNEIFtGYuBfCNxYi/8367923f934c6f2369f50b3f42c57be8/superman-exercise-hold.png?w=1200"  },
+          { name: "Bird Dogs (30 sec/side)", duration: 1, ref: "https://media.self.com/photos/621923e191957af75fd8b2ff/3:2/w_6000,h_4000,c_limit/Gail-bird-dog.jpg" },
+        ],
+        CoolDown: [
+          { name: "Child’s Pose (1 min)", duration: 1, ref: "https://www.theyogacollective.com/wp-content/uploads/2019/10/4143473057707883372_IMG_8546-2-1200x800.jpg" },
+          { name: "Cat-Cow Stretch (1 min)", duration: 1, ref: "https://media1.popsugar-assets.com/files/thumbor/q1cA6Es2iZQ4gCrRKcIZlqr5MrQ=/fit-in/792x792/filters:format_auto():upscale()/2025/01/10/960/n/1922729/tmp_TSf6dQ_46ee51111cabbf45_PS24_Fitness_CatCow_Horizontal.jpg" },
+          { name: "Hamstring Stretch (1 min)", duration: 1, ref: "https://hips.hearstapps.com/hmg-prod/images/hamstring-stretches-min-1671014774.jpg?resize=980:*"},
+          { name: "Neck Rolls / Upper Back Stretch", duration: 1 },
+        ],
+      },
+
+      Day2: {
+        WarmUp: [
+          { name: "Jump Rope or High Knees (2 min)", duration: 2 },
+          { name: "Hip Circles & Shoulder Rolls (1 min)", duration: 1 },
+        ],
+        Exercise: [
+          { name: "Lateral Skater Jumps (2x30 sec)", duration: 1 },
+          { name: "Mountain Climbers (2x45 sec)", duration: 1.5 },
+          { name: "Deadbugs (3x10)", duration: 2, ref: "https://media.self.com/photos/580a37dc7f7be8915ea98685/master/w_1600%2Cc_limit/dead-bug_ab-stacked.jpg" },
+          { name: "V-Ups or Crunches (3x15)", duration: 2 },
+          { name: "Plank with Shoulder Taps (2x30 sec)", duration: 1 },
+          { name: "Reverse Lunges (2x10/leg)", duration: 2 },
+          { name: "Cobra Stretch + Child’s Pose (1 min each)", duration: 2, ref: "https://cdn.yogajournal.com/wp-content/uploads/2022/06/Upward-Facing-Dog-Mod-1_Andrew-Clark-e1670972827524-1024x598.jpg?width=1200" },
+        ],
+        CoolDown: [
+          { name: "Seated Forward Fold (1 min)", duration: 1, ref: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRONtCEwjLHn1ZfS5t3obievb4A1odiSTP5yg&s" },
+          { name: "Hip Flexor Stretch (1 min)", duration: 1 },
+          { name: "Thoracic Twist (1 min/side)", duration: 2 },
+        ],
+      },
+
+      Day3: {
+        WarmUp: [
+          { name: "Arm Swings + Leg Swings (2 min)", duration: 2 },
+          { name: "Jumping Jacks or Jog in Place (1 min)", duration: 1 },
+        ],
+        Exercise: [
+          { name: "Wall Sit (45 sec)", duration: 0.75 },
+          { name: "Step-ups (3x10/leg)", duration: 3 },
+          { name: "Triceps Dips (3x10)", duration: 3 },
+          { name: "Bicycle Crunches (3x30 sec)", duration: 1.5 },
+          { name: "Single Leg Deadlifts (1 min/leg)", duration: 2, ref: "https://images.squarespace-cdn.com/content/v1/5d31ed671abe780001b2964d/4ac409fa-6f55-444f-b258-60a30c0b09e3/image-asset.jpeg" },
+          { name: "Plank to Push-up (3x10)", duration: 2 },
+          { name: "Side Plank Reach Throughs (30 sec/side)", duration: 1 },
+        ],
+        CoolDown: [
+          { name: "Standing Quad Stretch (1 min/side)", duration: 2 },
+          { name: "Calf Stretch (1 min)", duration: 1 },
+          { name: "Spinal Twist (1 min/side)", duration: 2 },
+        ],
+      },
+    };
+
+    function loadDay(dayKey) {
+  const container = document.getElementById("workout-container");
+  const day = exercises[dayKey];
+  container.innerHTML = "";
+
+  const sections = ["WarmUp", "Exercise", "CoolDown"];
+
+  sections.forEach(section => {
+    const sectionEl = document.createElement("div");
+    sectionEl.className = "section";
+
+    const title = document.createElement("h2");
+    title.textContent =
+      section === "WarmUp" ? "Warm-Up" : section === "CoolDown" ? "Cool Down" : "Workout";
+    sectionEl.appendChild(title);
+
+    day[section].forEach(move => {
+      const ex = document.createElement("div");
+      ex.className = "exercise";
+
+      // Create +info link HTML only if ref exists
+      const infoLinkHTML = move.ref ? `<a href="#" class="info-link">+ info</a>` : "";
+
+      ex.innerHTML = `
+        <div class="name">${move.name}</div>
+        <div class="details">
+          ⏱ ${move.duration} min
+          ${infoLinkHTML}
+        </div>
+        ${move.ref ? `<div class="ref-content" style="display:none; margin-top:10px;">
+          ${move.ref.includes("youtube") || move.ref.includes("youtu.be") ? 
+              `<iframe width="320" height="180" src="${move.ref}" frameborder="0" allowfullscreen></iframe>` : 
+              `<img src="${move.ref}" alt="${move.name}" style="max-width:320px; border-radius:6px;" />`
+          }
+        </div>` : ""}
+      `;
+
+      sectionEl.appendChild(ex);
+
+      // Add event listener immediately for this exercise's info link if it exists
+      if (move.ref) {
+        const infoLink = ex.querySelector(".info-link");
+        const refContent = ex.querySelector(".ref-content");
+
+        infoLink.addEventListener("click", e => {
+          e.preventDefault();
+          if (refContent.style.display === "none") {
+            refContent.style.display = "block";
+            infoLink.textContent = "- info";
+          } else {
+            refContent.style.display = "none";
+            infoLink.textContent = "+ info";
+          }
+        });
+      }
+    });
+
+    container.appendChild(sectionEl);
+  });
+}
+
+
+  </script>
+</body>
+</html>
